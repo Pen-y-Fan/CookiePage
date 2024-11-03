@@ -1,0 +1,52 @@
+﻿# Rider project related files
+.idea/
+
+# Rider Patch files
+*.dotnet.user.patch
+
+# Ignore .NET user-specific files
+*.csproj.user
+
+# Ignore build results
+bin/
+obj/
+out/
+
+# ASP.NET runtime files
+*.log
+*.swp
+*.swo
+*.tmp
+
+# ASP.NET specific files
+appsettings*.json
+
+# Recycle Bin used by IDE
+.DS_Store
+._*
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# ReScript related files
+lib/bs/
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
