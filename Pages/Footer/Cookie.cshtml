@@ -1,0 +1,25 @@
+@page
+@model Cookie;
+
+@{
+    ViewData["Title"] = "Cookie";
+    var result = Model.Result;
+    var acceptCookies = Model.AcceptCookies;
+}
+<h1>@ViewData["Title"]</h1>
+<p>This is a demo page to show how to use cookies.</p>
+
+
+<form method="post">
+    <label>Accept Cookies:</label><br>
+    
+    <input type="radio" id="yes" name="AcceptCookies" value="yes" @(acceptCookies == "yes" ? "checked" : "")>
+    <label for="yes">Yes</label><br>
+    <input type="radio" id="no" name="AcceptCookies" value="no" @(acceptCookies == "no" ? "checked" : "")>
+    <label for="no">No</label><br>
+    <button type="submit">Submit</button>
+</form>
+@if (!string.IsNullOrEmpty(result))
+{
+    <p>Cookie preference set to: @result</p>
+}
