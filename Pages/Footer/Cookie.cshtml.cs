@@ -1,45 +1,46 @@
-﻿namespace CookiePage.Pages.Footer;
-
+﻿using CookiePage.Enums;
+using CookiePage.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+namespace CookiePage.Pages.Footer;
 public class Cookie : PageModel
 {
-    [BindProperty] public string? AcceptCookies { get; set; }
-
-    public string? Result { get; private set; }
-
+    [BindProperty] public CookieModel AcceptCookies { get; set; } = new() { Permission = YesNoEnum.No };
+    public CookieModel? Result { get; private set; }
     public void OnGet()
     {
         var cookieValue = Request.Cookies["permission-cookie"];
-        if (cookieValue != null)
+        if (cookieValue != null && Enum.TryParse(cookieValue, out YesNoEnum cookieValueResult))
         {
-            AcceptCookies = cookieValue == "true" ? "yes" : "no";
+            AcceptCookies.Permission = cookieValueResult;
         }
         else
         {
-            AcceptCookies = "yes";
+            AcceptCookies.Permission = YesNoEnum.No;
         }
-
-        // Logic for GET
     }
-
+    
     public IActionResult OnPost()
     {
-        SetPermissionCookie(AcceptCookies?.ToLower() == "yes" ? "true" : "false");
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+        
+        SetPermissionCookie(AcceptCookies.Permission.ToString());
 
         Result = AcceptCookies;
         return Page();
     }
-
     private void SetPermissionCookie(string permission)
     {
         Response.Cookies.Append("permission-cookie", permission, new CookieOptions
         {
-            Path = "/",
             HttpOnly = false,
             Secure = true,
-            SameSite = SameSiteMode.Lax
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTimeOffset.UtcNow.AddMonths(6)
         });
     }
 }

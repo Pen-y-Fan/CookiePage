@@ -1,25 +1,37 @@
 @page
+@using CookiePage.Enums
 @model Cookie;
 
 @{
     ViewData["Title"] = "Cookie";
     var result = Model.Result;
     var acceptCookies = Model.AcceptCookies;
+    var isYesChecked = acceptCookies.Permission == YesNoEnum.Yes ? "checked" : "";
+    var isNoChecked = acceptCookies.Permission == YesNoEnum.No ? "checked" : "";
 }
 <h1>@ViewData["Title"]</h1>
 <p>This is a demo page to show how to use cookies.</p>
 
-
 <form method="post">
     <label>Accept Cookies:</label><br>
-    
-    <input type="radio" id="yes" name="AcceptCookies" value="yes" @(acceptCookies == "yes" ? "checked" : "")>
-    <label for="yes">Yes</label><br>
-    <input type="radio" id="no" name="AcceptCookies" value="no" @(acceptCookies == "no" ? "checked" : "")>
-    <label for="no">No</label><br>
+    @Html.RadioButtonFor(model => model.AcceptCookies.Permission,
+        YesNoEnum.Yes,
+        new { @id = YesNoEnum.Yes.ToString(), isYesChecked }
+    )
+    <label asp-for="AcceptCookies.Permission" class="control-label">@YesNoEnum.Yes.ToString()</label><br>
+
+    @Html.RadioButtonFor(model => model.AcceptCookies.Permission,
+        YesNoEnum.No,
+        new { @id = YesNoEnum.No.ToString(), isNoChecked }
+    )
+    <label asp-for="AcceptCookies.Permission" class="control-label">@YesNoEnum.No.ToString()</label><br>
+
+    <span asp-validation-for="AcceptCookies.Permission" class="text-danger"></span><br>
+
     <button type="submit">Submit</button>
 </form>
-@if (!string.IsNullOrEmpty(result))
+
+@if (result != null)
 {
-    <p>Cookie preference set to: @result</p>
+    <p>Cookie preference set to: @result.Permission.ToString()</p>
 }
